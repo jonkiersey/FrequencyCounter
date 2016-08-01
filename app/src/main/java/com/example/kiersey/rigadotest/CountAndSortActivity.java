@@ -45,23 +45,23 @@ public class CountAndSortActivity extends AppCompatActivity {
 
     void runTest(int number[]) {
         // print the numbers sorted by the count of each unique number
-        int count[] = new int[21];
         int len = number.length;
-        int[][] numbers = new int[2][20];
-        int counter = 0;
-        node head = null;
+        int counter;
+        node head = null; //initialize head for BST
 
         TextView myText = (TextView) findViewById(R.id.textView);
         myText.setText("Frequency list:\n");
 
         for (int i = 1; i < 21; ++i) {
-            numbers[0][i-1] = i;
             counter = 0;
+
+            //count through the list of possible numbers, adding them to counter when found
             for (int j = 0; j < len; ++j) {
                 if(number[j] == i)
                     ++counter;
             }
-            numbers[1][i-1] = counter;
+
+            //add data to BST
             if(head == null)
                 head = new node(i, counter);
             else
@@ -71,24 +71,23 @@ public class CountAndSortActivity extends AppCompatActivity {
 
     }
 
+    //adds a node to the BST, id is the number in question, value is the freq of that number
     private void nodeInsert(node focusNode, int id, int value) {
-        if(focusNode == null) {
-            focusNode = new node(id,value);
-        }
-        else {
-            if(value >= focusNode.value)
-                if(focusNode.right == null)
-                    focusNode.right = new node(id,value);
-                else
-                    nodeInsert(focusNode.right, id, value);
+        //greater than or equals to the right
+        if(value >= focusNode.value)
+            if(focusNode.right == null)
+                focusNode.right = new node(id,value);
             else
-                if(focusNode.left == null)
-                    focusNode.left = new node(id,value);
-                else
-                    nodeInsert(focusNode.left, id, value);
-        }
+                nodeInsert(focusNode.right, id, value);
+        //less than to the left
+        else
+            if(focusNode.left == null)
+                focusNode.left = new node(id,value);
+            else
+                nodeInsert(focusNode.left, id, value);
     }
 
+    //prints the tree in the form "id * frequency"
     private void treePrint(node head) {
         TextView myText = (TextView) findViewById(R.id.textView);
         if(head == null)
